@@ -76,4 +76,6 @@ router.post( '/profile-img-upload', ( req, res ) => {profileImgUpload( req, res,
       }
      });
     });
+
     
+    module.exports = router;
