@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+// Home component! 
 class Home extends Component {
 	constructor(props) {
 		super(props);
@@ -10,27 +11,36 @@ class Home extends Component {
 		}
 	}
 	singleFileChangedHandler = ( event ) => {
+       console.log(event.target.files);
 		this.setState({
 		 selectedFile: event.target.files[0]
 		});
 	};
 	
-singleFileUploadHandler = (  ) => {
+singleFileUploadHandler = ( event ) => {
 // If file selected
 	const data = new FormData();
 if ( this.state.selectedFile ) {
-	data.append( 'profileImage', this.state.selectedFile, this.state.selectedFile.name );axios.post( '/api/profile/profile-img-upload', data, {
-	headers: {
+
+	this.setState({
+		selectedFile: event.target.files[0]
+	})
+	data.append( 'profileImage', this.state.selectedFile, this.state.selectedFile.name );
+	axios.post( '/api/profile/profile-img-upload', 
+	data, {
+	// Hier we defined our header!
+		headers: {
 	 'accept': 'application/json',
 	 'Accept-Language': 'en-US,en;q=0.8',
 	 'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
 	}
      })
+  //   // then give us status 200
 	.then( ( response ) => {if ( 200 === response.status ) {
-	  // If file size is larger than expected.
+//	  // If file size is larger than expected.
 	  if( response.data.error ) {
 	   if ( 'LIMIT_FILE_SIZE' === response.data.error.code ) {
-	    this.ocShowAlert( 'Max size: 2MB', 'red' );
+	    this.ocShowAlert( 'Max size: 4MB', 'red' );
 	   } else {
 	    console.log( response.data );// If not the given file type
 	    this.ocShowAlert( response.data.error, 'red' );
@@ -38,7 +48,7 @@ if ( this.state.selectedFile ) {
 	  } else {
 	   // Success
 	   let fileName = response.data;
-	   console.log( 'fileName', fileName );
+	   console.log( 'filedata', fileName );
 	   this.ocShowAlert( 'File Uploaded', '#3089cf' );
 	  }
 	 }
@@ -51,10 +61,28 @@ if ( this.state.selectedFile ) {
      this.ocShowAlert( 'Please upload file', 'red' );
     }};
 
+
+    // ShowAlert Function
+ ocShowAlert = ( message, background = '#3089cf' ) => {
+	let alertContainer = document.querySelector( '#oc-alert-container' ),
+	 alertEl = document.createElement( 'div' ),
+	 textNode = document.createTextNode( message );
+	alertEl.setAttribute( 'class', 'oc-alert-pop-up' );
+	( alertEl ).css( 'background', background );
+	alertEl.appendChild( textNode );
+	alertContainer.appendChild( alertEl );
+	setTimeout( function () {
+	 ( alertEl ).fadeOut( 'slow' );
+	 ( alertEl ).remove();
+	}, 3000 );
+     };
+
 	render() {
+		console.log(this.state)
 		return (
-			<div>
+			<div className="container">
 				{/* Single File Upload*/}
+				<div id="oc-alert-container"></div>
 				<div className="card border-light mb-3 mt-5" style={{ boxShadow: '0 5px 10px 2px rgba(195,192,192,.5)' }}>
 					<div className="card-header">
 						<h3 style={{ color: '#555', marginLeft: '12px' }}>Single Image Upload</h3>

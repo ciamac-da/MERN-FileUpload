@@ -23,7 +23,8 @@ const profileImgUpload = multer({
    cb(null, path.basename( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ) )
   }
  }),
- limits:{ fileSize: 20000000 }, // In bytes: 2000000 bytes = 20 MB
+ // Hier we define limitation of our file!
+ limits:{ fileSize: 4000000 }, // In bytes: 4000000 bytes = 4 MB
  fileFilter: function( req, file, cb ){
   checkFileType( file, cb );
  }
@@ -77,5 +78,5 @@ router.post( '/profile-img-upload', ( req, res ) => {profileImgUpload( req, res,
      });
     });
 
-    
+    // to export router function!
     module.exports = router;

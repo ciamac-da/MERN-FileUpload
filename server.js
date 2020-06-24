@@ -1,9 +1,13 @@
+// to import express!
 const express = require( 'express' );
+// to import body-parser
 const bodyParser = require( 'body-parser' );
 const path = require( 'path' );
 
+// to define router using Router() method of express
 const router = express.Router();
 
+// to catch express and saving it in a const called app(the name is totally up to you)
 const app = express();
 
 /**
@@ -16,6 +20,7 @@ app.use( bodyParser.json() );
 
 // We export the router so that the server.js file can pick it up
 module.exports = router;
+
 
 const profile = require( './routes/api/profile' );
 app.use( '/api/profile', profile );
@@ -33,4 +38,5 @@ if ( process.env.NODE_ENV === 'production' ) {
 // Set up a port
 const port = process.env.PORT || 5000;
 
+// This is how to listen the port
 app.listen( port, () => console.log( `Server running on port: ${port}` ) );
