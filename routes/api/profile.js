@@ -1,40 +1,17 @@
 const express = require("express");
-const aws = require("aws-sdk");
-const multerS3 = require("multer-s3");
 const multer = require("multer");
 const path = require("path");
 const url = require("url");
 
 const router = express.Router();
 
-var s3 = new aws.S3({
-      accessKeyId:"",
-      secretAccessKey:"",
-      Bucket:""
-})
+
 
 // Single Upload
 const profileImgUpload = multer({
- storage: multerS3({
-  s3: s3,
-  bucket: 'onclick',
-  acl: 'public-read',
-  key: function (req, file, cb) {
-   cb(null, path.basename( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ) )
-  }
- }),
- // Hier we define limitation of our file!
- limits:{ fileSize: 4000000 }, // In bytes: 4000000 bytes = 4 MB
- fileFilter: function( req, file, cb ){
-  checkFileType( file, cb );
- }
+      dest:"public/images/"
 }).single('profileImage');
 
-/** Check File Type
- * @param file
- * @param cb
- * @return {*}
- */
 function checkFileType( file, cb ){
  // Allowed ext
  const filetypes = /jpeg|jpg|png|gif/;
@@ -47,7 +24,6 @@ function checkFileType( file, cb ){
   cb( 'Error: Nur Bilder!' );
  }
 }
-
 /**
  * @route POST api/profile/business-img-upload
  * @desc Upload post image
@@ -73,6 +49,9 @@ router.post( '/profile-img-upload', ( req, res ) => {profileImgUpload( req, res,
          image: imageName,
          location: imageLocation
         } );
+        res.json(
+      {status:'ok'}
+        )
        }
       }
      });
