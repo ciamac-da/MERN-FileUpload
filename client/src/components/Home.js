@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import { Button, Card } from 'react-bootstrap';
 // Home component! 
 class Home extends Component {
 	constructor(props) {
@@ -10,7 +10,6 @@ class Home extends Component {
 		}
 	}
 	singleFileChangedHandler = ( event ) => {
-		debugger
        console.log(event.target.files);
 		this.setState({
 		 selectedFile: event.target.files[0]
@@ -18,7 +17,6 @@ class Home extends Component {
 	};
 	
 	singleFileUploadHandler = ( event ) => {
-		debugger
 		const data = new FormData();
 		if ( this.state.selectedFile ) {
 			data.append( 'profileImage', this.state.selectedFile, this.state.selectedFile.name );
@@ -42,7 +40,6 @@ class Home extends Component {
 	});
 	} else {
     	}};
-
 	render() {
 		console.log(this.state)
 		return (
@@ -58,13 +55,14 @@ class Home extends Component {
 						<p className="card-text">Please upload an image for your profile</p>
 						<input type="file" onChange={this.singleFileChangedHandler} />
 						<div className="mt-5">
-							<button className="btn btn-info" onClick={this.singleFileUploadHandler}>Upload!</button>
+							<Button className="btn btn-info" onClick={this.singleFileUploadHandler}>Upload!</Button>
 						</div>
 					</div>
 				</div>
 			</div>
 
-		);
+
+);
 	}
 }
 
